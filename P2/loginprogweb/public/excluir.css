@@ -1,0 +1,97 @@
+body {
+    /* Define a fonte, remove margens e centraliza o conteúdo */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Cor de fundo suave */
+    background-color: #f4f7f6;
+}
+
+h2 {
+    /* Estilo para o título */
+    color: #333;
+    margin-bottom: 20px;
+    /* Usando Vermelho para dar ênfase à ação perigosa */
+    border-bottom: 2px solid #dc3545;
+    padding-bottom: 5px;
+}
+
+form {
+    /* Container principal do formulário */
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Adicionando uma borda sutilmente vermelha para alertar */
+    border: 1px solid #f8d7da;
+}
+
+label {
+    /* Estilo dos rótulos (labels) */
+    font-weight: bold;
+    color: #555;
+    margin-top: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    /* Estilo dos campos de entrada */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    /* Efeito de foco */
+    border-color: #dc3545; /* Borda Vermelha no foco */
+    outline: none;
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.2);
+}
+
+button[type="submit"] {
+    /* Estilo para o botão principal (Excluir Conta) */
+    background-color: #dc3545; /* Vermelho para Ação Destrutiva/Perigosa */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    /* Efeito hover */
+    background-color: #c82333; /* Vermelho mais escuro */
+}
+
+button[onclick] {
+    /* Estilo para o botão secundário (Voltar ao Login) - Mantido Azul */
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+button[onclick]:hover {
+    /* Efeito hover */
+    background-color: #0056b3;
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <title>Cadastro</title>
+        <link rel="stylesheet" href="cadastro.css" />
+    </head>
+    <body>
+        <h2>Cadastro</h2>
+        <form action="/cadastro" method="post">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" required />
+
+            <label for="username">Usuário</label>
+            <input type="text" id="username" name="username" required />
+
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" required />
+
+            <button type="submit">Cadastrar</button>
+        </form>
+        <br />
+        <button onclick="window.location.href='login.html'">
+            Voltar ao Login
+        </button>
+    </body>
+</html>

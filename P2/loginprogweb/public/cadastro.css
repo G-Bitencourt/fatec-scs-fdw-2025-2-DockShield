@@ -1,0 +1,94 @@
+body {
+    /* Define a fonte e remove margens padrão */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    /* Centraliza o conteúdo principal */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Cor de fundo suave */
+    background-color: #f4f7f6; /* Cinza claro/Quase branco */
+}
+
+h2 {
+    /* Estilo para o título */
+    color: #333; /* Cinza escuro */
+    margin-bottom: 20px;
+    border-bottom: 2px solid #007bff; /* Linha azul de destaque */
+    padding-bottom: 5px;
+}
+
+form {
+    /* Container principal do formulário */
+    background-color: #ffffff; /* Fundo branco para destaque */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: 100%;
+    max-width: 400px; /* Limita a largura do formulário */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre os elementos */
+}
+
+label {
+    /* Estilo dos rótulos (labels) */
+    font-weight: bold;
+    color: #555; /* Cinza médio */
+    margin-top: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    /* Estilo dos campos de entrada de texto e senha */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    /* Efeito de foco (quando o campo é clicado) */
+    border-color: #007bff; /* Borda azul */
+    outline: none; /* Remove a borda padrão de foco do navegador */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+button[type="submit"] {
+    /* Estilo para o botão principal (Cadastrar) */
+    background-color: #28a745; /* Verde */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    /* Efeito hover (ao passar o mouse) */
+    background-color: #218838; /* Verde mais escuro */
+}
+
+button[onclick] {
+    /* Estilo para o botão secundário (Voltar ao Login) */
+    background-color: #007bff; /* Azul */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+button[onclick]:hover {
+    /* Efeito hover (ao passar o mouse) */
+    background-color: #0056b3; /* Azul mais escuro */
+}

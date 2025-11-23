@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <title>Editar Senha</title>
+        <link rel="stylesheet" href="editar_senha.css" />
+    </head>
+    <body>
+        <h2>Editar Senha</h2>
+        <form action="/editar_senha" method="post">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" name="username" required />
+
+            <label for="old_password">Senha Atual</label>
+            <input
+                type="password"
+                id="old_password"
+                name="old_password"
+                required
+            />
+
+            <label for="new_password">Nova Senha</label>
+            <input
+                type="password"
+                id="new_password"
+                name="new_password"
+                required
+            />
+
+            <button type="submit">Salvar Nova Senha</button>
+        </form>
+        <br />
+        <button onclick="window.location.href='login.html'">
+            Voltar ao Login
+        </button>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <title>Login</title>
+        <link rel="stylesheet" href="login.css" />
+    </head>
+    <body>
+        <h2>Login</h2>
+        <form action="/login" method="post">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" name="username" required />
+
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" required />
+
+            <button type="submit">Entrar</button>
+        </form>
+        <br />
+        <button onclick="window.location.href='cadastro.html'">
+            Cadastrar-se
+        </button>
+        <button onclick="window.location.href='excluir.html'">
+            Excluir Conta
+        </button>
+        <button onclick="window.location.href='editar_senha.html'">
+            Editar Senha
+        </button>
+    </body>
+</html>

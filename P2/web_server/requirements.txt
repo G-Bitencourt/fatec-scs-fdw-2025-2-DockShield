@@ -1,0 +1,6 @@
+flask
+pymongo
+configparser
+markdown
+jwt
+functools

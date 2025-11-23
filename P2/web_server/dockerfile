@@ -1,0 +1,56 @@
+# 1. Base Image: Ubuntu (simulando o servidor do seu irmão)
+FROM ubuntu:22.04
+
+# Evita perguntas durante a instalação
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 2. Instalação do Apache, Python e mod_wsgi
+RUN apt-get update && apt-get install -y \
+    apache2 \
+    libapache2-mod-wsgi-py3 \
+    python3 \
+    python3-pip \
+    python3-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# 3. Cria a pasta padrão que seu código exige
+WORKDIR /var/www/server_web
+
+# 4. Instala dependências do Python
+# Removemos o blinker do sistema para evitar conflito
+RUN apt-get remove -y python3-blinker || true
+COPY requirements.txt .
+RUN pip3 install --upgrade pip setuptools wheel && \
+    pip3 install -r requirements.txt
+
+# 5. Copia o Código Fonte
+COPY app.py .
+COPY templates/ templates/
+COPY static/ static/
+COPY web_config.ini .
+
+# Cria o arquivo .wsgi para o Apache conectar no Flask
+RUN echo "import sys\n\
+sys.path.insert(0, '/var/www/server_web')\n\
+from app import app as application" > app.wsgi
+
+# 6. Configura o Apache
+COPY server_web.conf /etc/apache2/sites-available/server_web.conf
+
+# Logs e Permissões (para o Apache conseguir escrever)
+RUN touch /var/log/cve_report_ai.log && \
+    chown www-data:www-data /var/log/cve_report_ai.log && \
+    chmod 664 /var/log/cve_report_ai.log && \
+    chown -R www-data:www-data /var/www/server_web && \
+    chmod -R 755 /var/www/server_web
+
+# 7. Ativa o site
+RUN a2dissite 000-default.conf && \
+    a2ensite server_web.conf
+
+# O Apache usa a porta 80
+EXPOSE 80
+
+# Inicia o Apache em primeiro plano
+CMD ["apachectl", "-D", "FOREGROUND"]

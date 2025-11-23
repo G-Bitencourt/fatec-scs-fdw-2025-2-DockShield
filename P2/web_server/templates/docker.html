@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes da Imagem {{ colecao }}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-dark text-light">
+    <div class="container py-5">
+        
+        <h1 class="mb-4">Detalhes da Imagem: {{ colecao }}</h1>
+        
+        <a href="{{ url_for('index') }}" class="btn btn-secondary mb-4">← Voltar para as imagens Docker</a>
+
+        {# --- Bloco Condicional para Análise da IA --- #}
+        {# Verifica se a variável 'analise_imagem_html' foi passada pelo backend (ou seja, se ela não é nula ou vazia) #}
+        {% if analise_imagem_html %}
+            <h2 class="mt-4 mb-3">Análise da Imagem por IA</h2>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="markdown-content">
+                        {# ATENÇÃO: O filtro '| safe' é essencial e de segurança.
+                           Ele diz ao Jinja2 para "confiar" nesta variável e renderizá-la
+                           como HTML puro (ex: <p>, <ul>, <strong>), em vez de
+                           "escapar" os caracteres (ex: &lt;p&gt;, &lt;ul&gt;).
+                           
+                           Use |safe apenas quando você confia na fonte do HTML
+                           (como uma saída de IA gerada internamente), para evitar
+                           ataques de XSS (Cross-Site Scripting). #}
+                        {{ analise_imagem_html | safe }}
+                    </div>
+                </div>
+            </div>
+        
+        {# 'else' é executado se o 'if' falhar (variável 'analise_imagem_html' está vazia) #}
+        {% else %}
+            <p class="text-warning">Nenhum relatório de análise de IA disponível para esta imagem.</p>
+        
+        {# Fim do bloco condicional 'if' #}
+        {% endif %}
+
+        {# --- Seção do Botão de Ação (Ver CVEs) --- #}
+        <div class="text-center mt-5">
+            
+            {# Este link leva o usuário para a lista de CVEs (o template cve.html)
+               Ele usa 'url_for' para construir o link para a rota 'cve_list',
+               passando o nome da 'colecao' atual como parâmetro. #}
+            <a href="{{ url_for('cve_list', colecao=colecao) }}" class="btn btn-primary btn-lg">
+                Ver CVEs desta Imagem
+            </a>
+        </div>
+
+    </div>
+</body>
+</html>

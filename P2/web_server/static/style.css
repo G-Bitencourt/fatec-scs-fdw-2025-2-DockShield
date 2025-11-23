@@ -1,0 +1,89 @@
+/* ==========================================================================
+   Estilos Gerais (Base da Página)
+   ========================================================================== */
+/* Define o tema escuro base para toda a página */
+body {
+    background-color: #1e1e1e; /* Cor de fundo escura principal (quase preto) */
+    color: #dcdcdc; /* Cor de texto clara (cinza claro) para legibilidade */
+}
+
+/* ==========================================================================
+   Estilos de Tipografia e Conteúdo
+   ========================================================================== */
+/* Estilização para blocos de texto pré-formatado (ex: tags <pre>) */
+pre {
+    background-color: #1e1e1e; /* Fundo consistente com o body */
+    color: #dcdcdc; /* Texto claro */
+    padding: 1rem; /* Espaçamento interno */
+    border-radius: 0.5rem; /* Bordas arredondadas */
+    white-space: pre-wrap; /* Permite a quebra de linha em texto longo */
+}
+
+/* Estilo para a área principal de conteúdo (ex: onde um Markdown é renderizado) */
+.markdown-content {
+    background-color: #2a2a2a;  /* Fundo ligeiramente mais claro que o body para destaque */
+    padding: 1rem;
+    border-radius: 0.5rem;
+    color: #dcdcdc;
+    font-family: monospace; /* Fonte monoespaçada para clareza (logs, código, etc.) */
+}
+
+/* ==========================================================================
+   Componentes (Overrides do Bootstrap para Tema Escuro)
+   ========================================================================== */
+
+/* --- Cards --- */
+/* Personalização do componente Card */
+.card {
+    background-color: #2a2a2a; /* Cor de fundo do card, igual ao .markdown-content */
+    border: none; /* Remove a borda padrão (comum em temas claros) */
+}
+
+/* Corpo do card */
+.card-body {
+    color: #dcdcdc; /* Garante a cor do texto dentro do card */
+}
+
+/* Título do Card */
+.card-title {
+    color: #dcdcdc; /* Garante que o título do card tenha a cor clara */
+}
+
+/* --- Botões --- */
+/* Personalização do botão secundário */
+.btn-secondary {
+    background-color: #555; /* Cinza médio para o botão */
+    border: none;
+}
+
+/* Efeito hover (mouse em cima) para o botão secundário */
+.btn-secondary:hover {
+    background-color: #777; /* Cor mais clara ao passar o mouse */
+}
+
+/* --- Grupos de Lista --- */
+/* Item de lista (para tema escuro) */
+.list-group-item {
+    background-color: #2a2a2a; /* Fundo dos itens da lista */
+    color: #dcdcdc; /* Texto dos itens da lista */
+    border-color: #3a3a3a; /* Cor da borda para separar os itens */
+}
+
+/* Efeito hover para itens da lista */
+.list-group-item:hover {
+    background-color: #3a3a3a; /* Fundo mais escuro/diferente no hover */
+    color: #fff; /* Texto branco para destaque no hover */
+}
+
+/* ==========================================================================
+   Classes Utilitárias (Helpers)
+   ========================================================================== */
+/*
+ * Classe utilitária para "badges" ou fundos de alta severidade (Laranja).
+ * Útil para destacar alertas ou níveis de prioridade.
+ */
+.bg-orange {
+    /* Usamos !important para garantir que esta classe de fundo (bg-*)
+       sobrescreva outras classes de fundo do Bootstrap (ex: bg-light). */
+    background-color: #fd7e14 !important; /* Laranja padrão do Bootstrap */
+}

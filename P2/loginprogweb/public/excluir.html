@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <title>Excluir Conta</title>
+        <link rel="stylesheet" href="excluir.css" />
+    </head>
+    <body>
+        <h2>Excluir Conta</h2>
+        <form action="/excluir" method="post">
+            <label for="username">Confirme seu Usuário</label>
+            <input type="text" id="username" name="username" required />
+
+            <label for="password">Confirme sua Senha</label>
+            <input type="password" id="password" name="password" required />
+
+            <button type="submit">Excluir Conta</button>
+        </form>
+        <br />
+        <button onclick="window.location.href='login.html'">
+            Voltar ao Login
+        </button>
+    </body>
+</html>

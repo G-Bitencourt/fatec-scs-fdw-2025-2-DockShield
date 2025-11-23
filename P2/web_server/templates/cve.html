@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>CVEs da Imagem {{ colecao }}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-dark text-light">
+    <div class="container py-5">
+        
+        <h1 class="mb-4">CVEs da Imagem: {{ colecao }}</h1>
+        
+        <a href="{{ url_for('docker_details', colecao=colecao) }}" class="btn btn-secondary mb-4">← Voltar para Análise da Imagem</a>
+
+        <h3 class="mb-3">Lista de CVEs</h3>
+        
+        <p class="text-white">Mostrando página {{ page }} de {{ total_pages }} (Total: {{ total_cves }} CVEs)</p>
+
+        <div class="list-group">
+            
+            {# Inicia o loop 'for' para iterar sobre cada 'documento' (CVE) passado pelo backend #}
+            {% for doc in documentos %}
+            
+                {# Verifica se o documento atual possui a chave 'cve'.
+                   Isso evita erros se algum documento estiver malformado. #}
+                {% if doc.get('cve') %}
+            
+                    <a href="{{ url_for('resumo', colecao=colecao, id=doc._id) }}" class="list-group-item list-group-item-action">
+                        
+                        {# Exibe o ID da CVE (ex: CVE-2023-1234) #}
+                        {{ doc['cve'][0]['id'] }}
+
+                        {# --- Início do Bloco de Lógica de Severidade (Jinja2) --- #}
+                        
+                        {# 1. Define valores padrão "UNKNOWN" para severidade e score.
+                           Isso garante que algo será exibido mesmo se os dados estiverem faltando. #}
+                        {% set severity = 'UNKNOWN' %}
+                        {% set score = 'UNKNOWN' %}
+
+                        {# 2. Obtém o dicionário de 'metrics' (ou um dicionário vazio se não existir) #}
+                        {% set metrics = doc['cve'][0].get('metrics', {}) %}
+
+                        {# 3. Tenta obter dados da CVSS v3.1 (a mais moderna e preferida) #}
+                        {% if metrics.get('cvssMetricV31') %}
+                            {% set cvssData = metrics['cvssMetricV31'][0].get('cvssData', {}) %}
+                            {% set severity = cvssData.get('baseSeverity', 'UNKNOWN') %}
+                            {% set score = cvssData.get('baseScore', 'UNKNOWN') %}
+                        
+                        {# 4. Se a v3.1 não existir, tenta obter dados da CVSS v3.0 #}
+                        {% elif metrics.get('cvssMetricV30') %}
+                            {% set cvssData = metrics['cvssMetricV30'][0].get('cvssData', {}) %}
+                            {% set severity = cvssData.get('baseSeverity', 'UNKNOWN') %}
+                            {% set score = cvssData.get('baseScore', 'UNKNOWN') %}
+                        
+                        {# 5. Se nem v3.1 nem v3.0 existirem, tenta a v2 (legado) #}
+                        {% elif metrics.get('cvssMetricV2') %}
+                            {% set cvssData = metrics['cvssMetricV2'][0] %}
+                            {# Note que a v2 usa 'severity' e 'baseScore' em níveis diferentes #}
+                            {% set severity = cvssData.get('severity', 'UNKNOWN') %}
+                            {% set score = cvssData.get('baseScore', 'UNKNOWN') %}
+                        {% endif %}
+                        {# --- Fim do Bloco de Lógica de Severidade --- #}
+
+
+                        {# --- Início do Bloco de Lógica do Badge (Jinja2) --- #}
+                        
+                        {# 1. Define a classe padrão do badge (cinza) #}
+                        {% set badge_class = 'bg-secondary' %}
+                        
+                        {# 2. Apenas aplica lógica de cores se um 'score' válido foi encontrado #}
+                        {% if score != 'UNKNOWN' %}
+                            {# Filtro |float converte o score (string) para número decimal para comparação #}
+                            
+                            {# Baixa (Verde) #}
+                            {% if severity == 'LOW' or score|float < 4.0 %}
+                                {% set badge_class = 'bg-success' %}
+                            
+                            {# Média (Amarelo) - Requer texto escuro para legibilidade #}
+                            {% elif severity == 'MEDIUM' or (score|float >= 4.0 and score|float < 7.0) %}
+                                {% set badge_class = 'bg-warning text-dark' %}
+                            
+                            {# Alta (Laranja) - Usa a classe personalizada 'bg-orange' do style.css #}
+                            {% elif severity == 'HIGH' or (score|float >= 7.0 and score|float < 9.0) %}
+                                {% set badge_class = 'bg-orange text-white' %}
+                            
+                            {# Crítica (Vermelho) #}
+                            {% elif severity == 'CRITICAL' or score|float >= 9.0 %}
+                                {% set badge_class = 'bg-danger' %}
+                            {% endif %}
+                        {% endif %}
+                        {# --- Fim do Bloco de Lógica do Badge --- #}
+
+                        <span class="badge {{ badge_class }} float-end">
+                            {# Exibe o resultado final, formatado se o score for conhecido #}
+                            {% if score != 'UNKNOWN' %}
+                                {{ severity }} ({{ score }})
+                            {% else %}
+                                UNKNOWN
+                            {% endif %}
+                        </span>
+                    </a>
+                {% endif %} {# Fim do 'if doc.get('cve')' #}
+            {% endfor %} {# Fim do loop 'for doc in documentos' #}
+        </div>
+        <nav aria-label="Navegação de página" class="mt-4">
+            <ul class="pagination justify-content-center">
+                
+                <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('cve_list', colecao=colecao, page=page - 1) }}">Anterior</a>
+                </li>
+                
+                {# Loop 'for' para gerar os números de página (ex: 1, 2, 3...) #}
+                {% for p in range(1, total_pages + 1) %}
+                    <li class="page-item {% if p == page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('cve_list', colecao=colecao, page=p) }}">{{ p }}</a>
+                    </li>
+                {% endfor %}
+                
+                <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('cve_list', colecao=colecao, page=page + 1) }}">Próximo</a>
+                </li>
+            </ul>
+        </nav>
+        </div>
+</body>
+</html>

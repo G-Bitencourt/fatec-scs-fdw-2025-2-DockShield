@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório da {{ doc['cve'][0]['id'] }}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body> <div class="container py-5">
+        
+        <h1 class="mb-4">Relatório da {{ doc['cve'][0]['id'] }}</h1>
+        
+        <a href="{{ url_for('cve_list', colecao=doc['colecao']) }}" class="btn btn-secondary mb-4">← Voltar para CVEs</a>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Informações Principais:</h5>
+                <ul>
+                    <li><strong>ID:</strong> {{ doc['cve'][0]['id'] }}</li>
+                    <li><strong>Status:</strong> {{ doc['cve'][0]['vulnStatus'] }}</li>
+                    <li><strong>Publicado em:</strong> {{ doc['cve'][0]['published'] }}</li>
+                    <li><strong>Última modificação:</strong> {{ doc['cve'][0]['lastModified'] }}</li>
+                    <li><strong>Identificado por:</strong> {{ doc['cve'][0]['sourceIdentifier'] }}</li>
+
+                    {# --- Bloco de Lógica de Fallback do CVSS --- #}
+                    {# Como os dados de CVE podem vir em formatos diferentes (v3.1, v3.0, v2),
+                       este bloco tenta exibir a versão mais recente primeiro. #}
+
+                    {# 1. Prioridade Máxima: Tenta carregar dados CVSS v3.1 #}
+                    {% if doc['cve'][0]['metrics']['cvssMetricV31'] %}
+                        <li><strong>Score (v3.1):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV31'][0]['cvssData']['baseScore'] }}</li>
+                        <li><strong>Severidade (v3.1):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV31'][0]['cvssData']['baseSeverity'] }}</li>
+                        <li><strong>Vetor do ataque (v3.1):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV31'][0]['cvssData']['attackVector'] }}</li>
+                        <li><strong>Complexidade do Ataque (v3.1):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV31'][0]['cvssData']['attackComplexity'] }}</li>
+                        <li><strong>Privilegios requeridos (v3.1):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV31'][0]['cvssData']['privilegesRequired'] }}</li>
+                        <li><strong>Necessidade de interação do usuário (v3.1):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV31'][0]['cvssData']['userInteraction'] }}</li>
+                        <li><strong>Score do impacto (v3.1):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV31'][0]['impactScore'] }}</li>
+                    
+                    {# 2. Fallback: Se v3.1 não existir, tenta carregar dados CVSS v3.0 #}
+                    {% elif doc['cve'][0]['metrics']['cvssMetricV30'] %}
+                        <li><strong>Score (v3.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV30'][0]['cvssData']['baseScore'] }}</li>
+                        <li><strong>Severidade (v3.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV30'][0]['cvssData']['baseSeverity'] }}</li>
+                        <li><strong>Vetor do ataque (v3.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV30'][0]['cvssData']['attackVector'] }}</li>
+                        <li><strong>Complexidade do Ataque (v3.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV30'][0]['cvssData']['attackComplexity'] }}</li>
+                        <li><strong>Privilegios requeridos (v3.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV30'][0]['cvssData']['privilegesRequired'] }}</li>
+                        <li><strong>Necessidade de interação do usuário (v3.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV30'][0]['cvssData']['userInteraction'] }}</li>
+                        <li><strong>Score do impacto (v3.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV30'][0]['impactScore'] }}</li>
+                    
+                    {# 3. Fallback: Se nem v3.1 nem v3.0 existirem, tenta v2.0 (legado) #}
+                    {# Note que os nomes das chaves mudam (ex: 'accessVector' em vez de 'attackVector') #}
+                    {% elif doc['cve'][0]['metrics']['cvssMetricV2'] %}
+                        <li><strong>Score (v2.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV2'][0]['cvssData']['baseScore'] }}</li>
+                        <li><strong>Severidade (v2.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV2'][0]['cvssData']['baseSeverity'] }}</li>
+                        <li><strong>Vetor do ataque (v2.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV2'][0]['cvssData']['accessVector'] }}</li>
+                        <li><strong>Complexidade do Ataque (v2.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV2'][0]['cvssData']['accessComplexity'] }}</li>
+                        <li><strong>Privilegios requeridos (v2.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV2'][0]['cvssData']['authentication'] }}</li>
+                        <li><strong>Necessidade de interação do usuário (v2.0):</strong> {{ doc['cve'][0]['metrics']['cvssMetricV2'][0]['cvssData']['userInteraction'] }}</li>
+                    
+                    {# 4. Fallback Final: Se nenhum dado de métrica for encontrado #}
+                    {% else %}
+                        <li><strong>Score:</strong> Informação não disponível</li>
+                        <li><strong>Severidade:</strong> Informação não disponível</li>
+                        <li><strong>Vetor do ataque:</strong> Informação não disponível</li>
+                        <li><strong>Complexidade do Ataque:</strong> Informação não disponível</li>
+                        <li><strong>Privilegios requeridos:</strong> Informação não disponível</li>
+                        <li><strong>Necessidade de interação do usuário:</strong> Informação não disponível</li>
+                        <li><strong>Score do impacto:</strong> Informação não disponível</li>
+                    
+                    {# Fim do bloco if/elif/else #}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Relatório da IA:</h5>
+                
+                <div class="markdown-content">
+                    
+                    {{ content_html | safe }}
+                </div>
+            </div>
+        </div>
+        
+    </div> </body>
+</html>
