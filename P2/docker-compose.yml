@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # 1. Banco de Dados (MongoDB)
   db:
-    image: mongo:latest
+    image: mongo:4.4
     container_name: fatec-mongo-db
     ports:
       - "27017:27017"
@@ -14,14 +14,14 @@ services:
 
   # 2. Frontend (Node.js - Login/Cadastro)
   frontend:
-    build: ./LOGINPROGWEB   # Aponta para a pasta do Node
+    build: ./loginprogweb
     container_name: fatec-frontend-auth
     ports:
       - "3000:3000"
     environment:
       # Conecta no container 'db' e usa a mesma senha do Flask
       - MONGO_URI=mongodb://db:27017/login
-      - JWT_SECRET=minha_senha_super_secreta_compartilhada
+      - JWT_SECRET=53D0jjbsjTb6Of+e0O>+na&p@UO0M!Z<_sUx.d*-c+ND
     depends_on:
       - db
     networks:
@@ -29,10 +29,9 @@ services:
 
   # 3. Backend (Flask + Apache - Aplicação Principal)
   backend:
-    build: ./web_server     # Aponta para a pasta do Flask
+    build: ./web_server
     container_name: fatec-backend-app
     ports:
-      # Mapeia a porta 5000 do seu Windows para a porta 80 do Apache
       - "5000:80"
     environment:
       - FLASK_RUN_HOST=0.0.0.0
