@@ -27,7 +27,7 @@ if "DATABASE" in config:
         mongo_uri = f"mongodb://{mongo_location}:{mongo_port}/"
         client = MongoClient(mongo_uri)
         client.admin.command("ping")
-        db = client[config["DATABASE"]["db"]]
+        db = client[config["DATABASE"]["collection"]]
     except Exception:
         db = None
 else:
