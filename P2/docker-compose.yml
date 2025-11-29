@@ -12,22 +12,20 @@ services:
     networks:
       - fatec-network
 
-  # 2. Frontend (Node.js - Login/Cadastro)
+  # 2. Frontend (Node.js - Login)
   frontend:
     build: ./loginprogweb
     container_name: fatec-frontend-auth
     ports:
       - "3000:3000"
-    environment:
-      # Conecta no container 'db' e usa a mesma senha do Flask
-      - MONGO_URI=mongodb://db:27017/login
-      - JWT_SECRET=53D0jjbsjTb6Of+e0O>+na&p@UO0M!Z<_sUx.d*-c+ND
+    # REMOVIDO: A seção 'environment' foi apagada daqui.
+    # Agora ele vai ler automaticamente do arquivo .env na pasta LOGINPROGWEB
     depends_on:
       - db
     networks:
       - fatec-network
 
-  # 3. Backend (Flask + Apache - Aplicação Principal)
+  # 3. Backend (Flask + Apache)
   backend:
     build: ./web_server
     container_name: fatec-backend-app
