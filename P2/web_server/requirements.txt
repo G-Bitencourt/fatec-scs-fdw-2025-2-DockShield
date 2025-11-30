@@ -1,4 +1,4 @@
 flask
 pymongo
 markdown
-jwt
+pyjwt
